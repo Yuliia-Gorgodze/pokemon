@@ -1,0 +1,74 @@
+
+.button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+width: 138px;
+border: none;
+border-radius: 10px;
+background-color:#FFFFFF;
+text-transform: uppercase;
+color: #FF868E;
+margin: 0 auto 20px auto;
+}
+.button:hover{
+    background-color: #FBE0DC;
+    color: #FF868E;
+    text-decoration: none;
+}
+.buttonActive{
+    color: #FFFFFF;
+    background-color: #FF868E;
+}
+.cardVoting{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 138px;
+    height: 198px;
+    background: #B4B7FF;
+    border: 4px solid rgba(255, 255, 255, 0.6);
+    box-sizing: border-box;
+    border-radius: 20px;
+    margin: 10px auto;
+}
+.cardGallery{
+      display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 138px;
+    height: 198px;
+    background: #FFD280;
+    border: 4px solid rgba(255, 255, 255, 0.6);
+    box-sizing: border-box;
+    margin: 10px auto;
+    
+}
+.cardBreeds{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 138px;
+    height: 198px;
+    background: #97EAB9;
+    border: 4px solid rgba(255, 255, 255, 0.6);
+    box-sizing: border-box;
+    border-radius: 20px;
+    margin: 10px auto;
+  
+}
+
+    @media screen and (min-width: 768px) {
+        .list{
+            display: flex;
+        
+            }
+            .cardBreeds, .cardGallery, .cardVoting{
+                margin: 0 26px 10px 0;
+            }
+            .button{
+                margin: 0 ;
+            }
+            
+    }

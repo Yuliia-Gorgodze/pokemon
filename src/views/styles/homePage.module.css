@@ -1,0 +1,97 @@
+
+.baseContainerHome{
+
+font-family: Jost;
+font-style: normal;
+margin: 0 auto 0 auto;
+padding: 0 20px;
+
+}
+.baseContainer{
+  top: 0;
+ left: 600px;
+min-height: 840px;
+
+border-radius: 20px;
+
+}
+
+
+.title{
+ 
+    color: #1D1D1D;
+
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 58px;
+    margin-bottom: 10px;
+}
+.text{
+  display: block;
+font-weight: normal;
+font-size: 20px;
+line-height: 29px;
+color: #8C8C8C;
+margin-bottom: 40px;
+}
+
+
+.listTitle{
+  display: block;
+font-weight: 500;
+font-size: 20px;
+line-height: 29px;
+color: #1D1D1D;
+margin-bottom: 20px;
+}
+
+.logo{
+
+  width: 200px;
+  height: 80px;
+}
+.imgHome{
+  display: none;
+ }
+ @media screen and (max-width: 767px) {
+  .container {
+   
+    margin: 0 auto;
+  }
+ }
+@media screen and (min-width: 768px) {
+  .baseContainerHome{
+    display: flex;
+  }
+  .container {
+    position: relative;
+    left: 550px;
+   
+  }
+  .imgHome{
+    display: block;
+    padding: 30px 30px 100px 30px;
+  
+    width: 350px;
+    background-color: inherit;
+    background-image: url(../../img/pokemon-logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+  }
+  .homeContainer{
+    max-width: 600px;
+    position: fixed;
+}
+.text{
+  margin-bottom: 60px;
+}
+  }
+  @media screen and (min-width: 1200px) {
+    .imgHome{
+      width: 400px;
+    }
+    .container{
+      margin-top: 60px;
+    }
+  }
