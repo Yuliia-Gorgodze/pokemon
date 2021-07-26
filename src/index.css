@@ -61,3 +61,6 @@ a{
   color: #fff;
   font-size: 1em;
 }
+.buttonAddFavorite{
+  background-color:  rgb(24, 144, 255, 0.3) ;
+}

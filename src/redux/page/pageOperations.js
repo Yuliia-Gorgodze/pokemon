@@ -7,7 +7,6 @@ import {
   const page = (page) =>
  dispatch => {
   dispatch(pageSucces(page));
-
   };
   
 

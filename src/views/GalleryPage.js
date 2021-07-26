@@ -1,11 +1,15 @@
   
 import React, { useState, useEffect } from 'react';
 import Card from '../components/PokemonCard';
-import { getPokemon, getAllPokemon } from '../services/pokemon';
+import { getPokemon, getAllPokemon, getPokemonUrl } from '../services/pokemon';
 import style from './styles/galleryPage.module.css'
+import Modal from '../components/ModalPokemonInfo'
+import { LoadingOutlined } from '@ant-design/icons';
 
 function GalleryPage() {
-  const [pokemonData, setPokemonData] = useState([])
+  const [pokemonData, setPokemonData] = useState([]);
+  const [pokemonModal, setPokemonModal] = useState({});
+  const [isOpen, setIsOpen] = useState(false)
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
   const [loading, setLoading] = useState(true);
@@ -14,6 +18,7 @@ function GalleryPage() {
   useEffect(() => {
     async function fetchData() {
       let response = await getAllPokemon(initialURL)
+      console.log(response.next, response.previous);
       setNextUrl(response.next);
       setPrevUrl(response.previous);
       await loadPokemon(response.results);
@@ -46,12 +51,25 @@ function GalleryPage() {
       let pokemonRecord = await getPokemon(pokemon)
       return pokemonRecord
     }))
+    console.log(_pokemonData);
     setPokemonData(_pokemonData);
   }
 
+  const  updatePokemon = async (pokemon, modalOpen) =>  {
+    console.log('pokemon ',pokemon.id);
+    const url = `${initialURL}/${pokemon.id}/`
+    console.log(url);
+  let pokemonUrl = await  getPokemonUrl(url)
+   await setPokemonModal({pokemonUrl})
+   if(modalOpen){
+    setIsOpen(true)
+   }
+  }
+
   return (
-      <div>
-        {loading ? <h1 style={{ textAlign: 'center' }}>Loading...</h1> : (
+      <div >
+        {loading ? 
+         <LoadingOutlined style={{width: '550px', marginTop: '200px'}} className={style.loader}/>  : (
           <>
             <div className=' btn'>
               <button onClick={prev}>Prev</button>
@@ -59,17 +77,20 @@ function GalleryPage() {
             </div>
             <div className={`${style.pokemonContainer} `}>
               {pokemonData.map((pokemon, i) => {
-                return <Card key={i} pokemon={pokemon} />
+                return <Card updatePokemon={updatePokemon} key={i} pokemon={pokemon} />
               })}
             </div>
             <div className="btn">
               <button onClick={prev}>Prev</button>
               <button onClick={next}>Next</button>
             </div>
+            <Modal  pokemon={pokemonModal} open={isOpen} onClose={() => setIsOpen(false)}/>
+        
           </>
         )}
+       
       </div>
- 
+       
   );
 }
 

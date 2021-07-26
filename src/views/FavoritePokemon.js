@@ -10,7 +10,7 @@ function FavoritePage() {
  const favoritePokemon = useSelector(selectors.getFavoritePokemon)
 
   return (
-      <div>
+      <>
             {favoritePokemon.length !== 0 || <div>
                 <span className={style.text}>Ты нас не любишь?</span>
                 <span className={style.textTwo}>Полюби!!!</span>
@@ -20,7 +20,7 @@ function FavoritePage() {
                 return <Card key={i} pokemon={pokemon} />
               })}
             </div>
-      </div>
+      </>
  
   );
 }
