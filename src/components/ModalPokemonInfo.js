@@ -57,10 +57,7 @@ const addFavorite  = (pokemon) => {
            <li className={style.weight}><span>Weight:</span> <span>{pokemon.pokemonUrl.weight}</span></li>
            <li className={style.height}><span>Height:</span><span>{pokemon.pokemonUrl.height}</span></li>
          </ul>
-         <button className={style.button} onClick={handleChange} type='button'>
-                {page === 'gallery' ? <HeartTwoTone className={style.favorite}  />
-                 : <DeleteTwoTone className={style.delete} />
-                 }</button>
+         
       </div>
     </>,
     document.getElementById('portal')
