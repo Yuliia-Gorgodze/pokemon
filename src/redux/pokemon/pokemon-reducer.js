@@ -3,8 +3,12 @@ import { createReducer } from '@reduxjs/toolkit';
 import {
     addFavoritePokemonSuccess,
     deleteFavoritePokemonSuccess,
-} from './pokemon-actions';
+    getPokemonSuccess
 
+} from './pokemon-actions';
+const allPokemon = createReducer([],{
+  [getPokemonSuccess]: (_, { payload }) => payload,
+})
 const favoritePokemon = createReducer(
     [],
     {
@@ -23,5 +27,5 @@ const favoritePokemon = createReducer(
   );
 
 export default combineReducers({
-    favoritePokemon
+    favoritePokemon, allPokemon
 });

@@ -1,20 +1,27 @@
   
 import React, { useState, useEffect } from 'react';
+import {useSelector, useDispatch} from 'react-redux'
 import Card from '../components/PokemonCard';
 import { getPokemon, getAllPokemon, getPokemonUrl } from '../services/pokemon';
 import style from './styles/galleryPage.module.css'
 import Modal from '../components/ModalPokemonInfo'
+import selectors from '../redux/pokemon/pokemon-selectors'
+import operations from '../redux/pokemon/pokemon-operations'
 import { LoadingOutlined } from '@ant-design/icons';
 
 function GalleryPage() {
-  const [pokemonData, setPokemonData] = useState([]);
+  
   const [pokemonModal, setPokemonModal] = useState({});
   const [isOpen, setIsOpen] = useState(false)
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const initialURL = 'https://pokeapi.co/api/v2/pokemon'
-
+  const dispatch = useDispatch()
+  const allPokemon = useSelector(selectors.getAllPokemons)
+  
+  console.log('allPokemon', allPokemon)
+  
   useEffect(() => {
     async function fetchData() {
       let response = await getAllPokemon(initialURL)
@@ -51,8 +58,7 @@ function GalleryPage() {
       let pokemonRecord = await getPokemon(pokemon)
       return pokemonRecord
     }))
-    console.log(_pokemonData);
-    setPokemonData(_pokemonData);
+    dispatch(operations.addAllPokemon(_pokemonData));
   }
 
   const  updatePokemon = async (pokemon, modalOpen) =>  {
@@ -76,8 +82,9 @@ function GalleryPage() {
               <button onClick={next}>Next</button>
             </div>
             <div className={`${style.pokemonContainer} `}>
-              {pokemonData.map((pokemon, i) => {
-                return <Card updatePokemon={updatePokemon} key={i} pokemon={pokemon} />
+              {allPokemon.map((pokemon, i) => {
+            
+                return <Card  updatePokemon={updatePokemon} key={i} pokemon={pokemon} />
               })}
             </div>
             <div className="btn">

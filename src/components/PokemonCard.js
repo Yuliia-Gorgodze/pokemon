@@ -15,10 +15,10 @@ function Card({ pokemon, updatePokemon }) {
   const page = useSelector(selectorsPage.getPage)
 
    const favoritPokemonId = useSelector(selectors.getFavoritePokemon).map(el => el.id)
-
+  
  
     const handleChange = (e) =>{
-        console.log();
+        console.log(e);
      if(page ==='gallery' &&  e.target.nodeName === 'BUTTON'){
       e.target.classList.toggle('buttonAddFavorite')
     }
@@ -41,16 +41,16 @@ function Card({ pokemon, updatePokemon }) {
             dispatch(operations.addFavoritePokemon(pokemon))
         }  
     } 
-
+    console.log();
     return (
         <div  className={`${style.baseContainer} ${style.Card}`} >
             <div className={style.Card__name}>
                 {pokemon.name}
             </div>
                 <img onClick={handleChange} className={style.Card__img} src={pokemon.sprites.front_default} alt="pokemon" />
-            <button className={style.button} onClick={handleChange} type='button'>
-                {page === 'gallery' ? <HeartTwoTone className={style.favorite}  />
-                 : <DeleteTwoTone className={style.delete} />
+            <button className={`${style.button} ${favoritPokemonId.find(el => el === pokemon.id) === undefined ? '': 'buttonAddFavorite'}`} onClick={handleChange} type='button'>
+                {page === 'gallery' && favoritPokemonId.find(el => el === pokemon.id) === undefined ? <HeartTwoTone className={style.favorite}  />
+                 : <DeleteTwoTone className={style.delete } />
                  }</button>
         </div>
     );

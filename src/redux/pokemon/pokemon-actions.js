@@ -8,3 +8,7 @@ export const addFavoritePokemonRequest = createAction('pokemon/addFavoritePokemo
 export const addFavoritePokemonSuccess = createAction('pokemon/addFavoritePokemonSuccess',);
 export const addFavoritePokemonError = createAction( 'pokemon/addFavoritePokemonError',);
 
+export const getPokemonRequest = createAction('pokemon/getPokemonRequest',);
+export const getPokemonSuccess = createAction('pokemon/getPokemonSuccess',);
+export const getPokemonError = createAction( 'pokemon/getPokemonError',);
+

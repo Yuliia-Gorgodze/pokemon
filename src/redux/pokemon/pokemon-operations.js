@@ -5,8 +5,22 @@ import {
     deleteFavoritePokemonRequest,
     deleteFavoritePokemonSuccess,
     deleteFavoritePokemonError,
+    getPokemonRequest,
+     getPokemonSuccess,
+      getPokemonError
 } from './pokemon-actions';
 
+   const addAllPokemon = (pokemons) => 
+    async dispatch => {
+      dispatch(getPokemonRequest())
+      try {
+        dispatch(getPokemonSuccess(pokemons));
+      } catch (error) {
+        dispatch(getPokemonError(error));
+
+      }
+    }
+   
 
   const addFavoritePokemon = (pokemon) =>
   async dispatch => {
@@ -15,7 +29,7 @@ import {
       dispatch(addFavoritePokemonSuccess(pokemon));
     } catch (error) {
       dispatch(addFavoritePokemonError(error));
-    console.log('Упал');
+
     }
   };
   const deleteFavoritePokemon = (id) =>
@@ -29,5 +43,5 @@ import {
     }
   };
 
-const operations = { addFavoritePokemon, deleteFavoritePokemon}
+const operations = { addFavoritePokemon, deleteFavoritePokemon, addAllPokemon}
 export default operations 
