@@ -13,6 +13,7 @@ import 'antd/dist/antd.css';
 function GalleryPage() {
   const [pokemonModal, setPokemonModal] = useState({});
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
@@ -34,6 +35,9 @@ function GalleryPage() {
 
     async function fetchData() {
       let response = await getAllPokemon(initialURL);
+
+      setTotal(response.count);
+
       setNextUrl(response.next);
       setPrevUrl(response.previous);
       await loadPokemon(response.results);
@@ -104,7 +108,7 @@ function GalleryPage() {
           </div>
           <Row className={style.pokemonContainer}>
             {allPokemon.map(pokemon => (
-              <Col className={style.card}>
+              <Col key={pokemon.name} className={style.card}>
                 <Card
                   updatePokemon={updatePokemon}
                   key={pokemon.id}
@@ -113,15 +117,6 @@ function GalleryPage() {
               </Col>
             ))}
           </Row>
-          {/* <div className={`${style.pokemonContainer} `}>
-            {allPokemon.map(pokemon => (
-              <Card
-                updatePokemon={updatePokemon}
-                key={pokemon.id}
-                pokemon={pokemon}
-              />
-            ))}
-          </div> */}
           <div className="btn">
             <button onClick={prev}>Prev</button>
             <button onClick={next}>Next</button>
@@ -134,7 +129,7 @@ function GalleryPage() {
           <Pagination
             className={style.pagination}
             defaultCurrent={page}
-            total={1118}
+            total={total}
             showSizeChanger={false}
             onChange={onChange}
           />
