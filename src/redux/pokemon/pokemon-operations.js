@@ -39,7 +39,7 @@ import {
       dispatch(deleteFavoritePokemonSuccess(id));
     } catch (error) {
       dispatch(deleteFavoritePokemonError(error));
-    console.log('Упал');
+
     }
   };
 

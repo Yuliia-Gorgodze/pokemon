@@ -1,59 +1,71 @@
+import React, { useState } from 'react';
 
-import React, {useState} from 'react';
+import style from './styles/card.module.css';
 
-import style from './styles/card.module.css'
-
-import {useDispatch, useSelector} from 'react-redux'
-import selectors from '../redux/pokemon/pokemon-selectors'
-import selectorsPage from '../redux/page/pageSelectors'
-import operations from '../redux/pokemon/pokemon-operations'
-import {HeartTwoTone,  DeleteTwoTone } from '@ant-design/icons';
-
+import { useDispatch, useSelector } from 'react-redux';
+import selectors from '../redux/pokemon/pokemon-selectors';
+import selectorsPage from '../redux/page/pageSelectors';
+import operations from '../redux/pokemon/pokemon-operations';
+import { HeartTwoTone, DeleteTwoTone } from '@ant-design/icons';
 
 function Card({ pokemon, updatePokemon }) {
-    const dispatch = useDispatch();
-  const page = useSelector(selectorsPage.getPage)
+  const dispatch = useDispatch();
+  const page = useSelector(selectorsPage.getPage);
 
-   const favoritPokemonId = useSelector(selectors.getFavoritePokemon).map(el => el.id)
-  
- 
-    const handleChange = (e) =>{
-        console.log(e);
-     if(page ==='gallery' &&  e.target.nodeName === 'BUTTON'){
-      e.target.classList.toggle('buttonAddFavorite')
+  const favoritPokemonId = useSelector(selectors.getFavoritePokemon).map(
+    el => el.id,
+  );
+
+  const handleChange = e => {
+    if (page === 'gallery' && e.target.nodeName === 'BUTTON') {
+      e.target.classList.toggle('buttonAddFavorite');
     }
-    if(e.target.nodeName === 'BUTTON'){
-        addFavorite(pokemon)
+    if (e.target.nodeName === 'BUTTON') {
+      addFavorite(pokemon);
     }
-    if(page ==='gallery' &&  e.target.nodeName === 'IMG'){
-        updatePokemon(pokemon, true)
+    if (page === 'gallery' && e.target.nodeName === 'IMG') {
+      updatePokemon(pokemon, true);
     }
-    return
+    return;
+  };
+
+  const addFavorite = pokemon => {
+    if (favoritPokemonId.includes(pokemon.id)) {
+      dispatch(operations.deleteFavoritePokemon(pokemon.id));
+
+      return;
+    } else {
+      dispatch(operations.addFavoritePokemon(pokemon));
     }
-   
-    const addFavorite  = (pokemon) => {
-        console.log(favoritPokemonId);
-        if(favoritPokemonId.includes(pokemon.id)){
-            dispatch(operations.deleteFavoritePokemon(pokemon.id))
-  
-            return
-        }else{
-            dispatch(operations.addFavoritePokemon(pokemon))
-        }  
-    } 
-    console.log();
-    return (
-        <div  className={`${style.baseContainer} ${style.Card}`} >
-            <div className={style.Card__name}>
-                {pokemon.name}
-            </div>
-                <img onClick={handleChange} className={style.Card__img} src={pokemon.sprites.front_default} alt="pokemon" />
-            <button className={`${style.button} ${favoritPokemonId.find(el => el === pokemon.id) === undefined ? '': 'buttonAddFavorite'}`} onClick={handleChange} type='button'>
-                {page === 'gallery' && favoritPokemonId.find(el => el === pokemon.id) === undefined ? <HeartTwoTone className={style.favorite}  />
-                 : <DeleteTwoTone className={style.delete } />
-                 }</button>
-        </div>
-    );
+  };
+
+  return (
+    <div className={`${style.baseContainer} ${style.Card}`}>
+      <div className={style.Card__name}>{pokemon.name}</div>
+      <img
+        onClick={handleChange}
+        className={style.Card__img}
+        src={pokemon.sprites.front_default}
+        alt="pokemon"
+      />
+      <button
+        className={`${style.button} ${
+          favoritPokemonId.find(el => el === pokemon.id) === undefined
+            ? ''
+            : 'buttonAddFavorite'
+        }`}
+        onClick={handleChange}
+        type="button"
+      >
+        {page === 'gallery' &&
+        favoritPokemonId.find(el => el === pokemon.id) === undefined ? (
+          <HeartTwoTone className={style.favorite} />
+        ) : (
+          <DeleteTwoTone className={style.delete} />
+        )}
+      </button>
+    </div>
+  );
 }
 
-export default Card ;
+export default Card;
