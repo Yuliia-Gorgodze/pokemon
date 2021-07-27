@@ -9,7 +9,7 @@ import { CloseOutlined } from '@ant-design/icons';
 export default function Modal({ open, onClose, pokemon }) {
 
   if (!open) return null
-  console.dir(pokemon.pokemonUrl);
+
   return ReactDom.createPortal(
     <>
       <div className={style.overlyStyles} />
