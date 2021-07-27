@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Card from '../components/PokemonCard';
 import { getPokemon, getAllPokemon, getPokemonUrl } from '../services/pokemon';
 import style from './styles/galleryPage.module.css';
-import Modal from '../components/ModalPokemonInfo';
+import ModalPokemonInfo from '../components/ModalPokemonInfo';
 import selectors from '../redux/pokemon/pokemon-selectors';
 import operations from '../redux/pokemon/pokemon-operations';
 import { LoadingOutlined } from '@ant-design/icons';
+
+import 'antd/dist/antd.css';
 
 function GalleryPage() {
   const [pokemonModal, setPokemonModal] = useState({});
@@ -17,7 +19,7 @@ function GalleryPage() {
   const initialURL = 'https://pokeapi.co/api/v2/pokemon';
   const dispatch = useDispatch();
   const allPokemon = useSelector(selectors.getAllPokemons);
-  // const favoritePokemon = useSelector(selectors.getFavoritePokemon);
+
   useEffect(() => {
     async function addFavoritPokemon() {
       const parseFavoritePokemon = JSON.parse(
@@ -77,7 +79,9 @@ function GalleryPage() {
       setIsOpen(true);
     }
   };
-
+  const closeModal = () => {
+    setIsOpen(false);
+  };
   return (
     <div>
       {loading ? (
@@ -104,10 +108,11 @@ function GalleryPage() {
             <button onClick={prev}>Prev</button>
             <button onClick={next}>Next</button>
           </div>
-          <Modal
+
+          <ModalPokemonInfo
             pokemon={pokemonModal}
             open={isOpen}
-            onClose={() => setIsOpen(false)}
+            onClose={closeModal}
           />
         </>
       )}
