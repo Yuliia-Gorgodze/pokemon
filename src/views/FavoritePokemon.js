@@ -1,27 +1,42 @@
-  
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from '../components/PokemonCard';
-import selectors from '../redux/pokemon/pokemon-selectors'
-import { useSelector} from 'react-redux'
-import style from './styles/galleryPage.module.css'
+import selectors from '../redux/pokemon/pokemon-selectors';
+import operations from '../redux/pokemon/pokemon-operations';
+import { useSelector, useDispatch } from 'react-redux';
+import style from './styles/galleryPage.module.css';
 
 function FavoritePage() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    async function addFavoritPokemon() {
+      const parseFavoritePokemon = JSON.parse(
+        await localStorage.getItem('favoritePokemon'),
+      );
+      if (parseFavoritePokemon) {
+        parseFavoritePokemon.forEach(el =>
+          dispatch(operations.addFavoritePokemon(el)),
+        );
+      }
+    }
+    addFavoritPokemon();
+  }, []);
 
- const favoritePokemon = useSelector(selectors.getFavoritePokemon)
+  const favoritePokemon = useSelector(selectors.getFavoritePokemon);
 
   return (
-      <>
-            {favoritePokemon.length !== 0 || <div>
-                <span className={style.text}>Ты нас не любишь?</span>
-                <span className={style.textTwo}>Полюби!!!</span>
-                </div>}
-            <div className={`${style.pokemonContainer} `}>
-              {favoritePokemon.map((pokemon, i) => {
-                return <Card key={i} pokemon={pokemon} />
-              })}
-            </div>
-      </>
- 
+    <>
+      {favoritePokemon.length !== 0 || (
+        <div>
+          <span className={style.text}>Ты нас не любишь?</span>
+          <span className={style.textTwo}>Полюби!!!</span>
+        </div>
+      )}
+      <div className={`${style.pokemonContainer} `}>
+        {favoritePokemon.map(pokemon => (
+          <Card key={pokemon.id} pokemon={pokemon} />
+        ))}
+      </div>
+    </>
   );
 }
 
