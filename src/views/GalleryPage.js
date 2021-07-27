@@ -7,9 +7,13 @@ import Modal from '../components/ModalPokemonInfo';
 import selectors from '../redux/pokemon/pokemon-selectors';
 import operations from '../redux/pokemon/pokemon-operations';
 import { LoadingOutlined } from '@ant-design/icons';
+import { Pagination, Row, Col } from 'antd';
+import 'antd/dist/antd.css';
 
 function GalleryPage() {
   const [pokemonModal, setPokemonModal] = useState({});
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
@@ -17,7 +21,7 @@ function GalleryPage() {
   const initialURL = 'https://pokeapi.co/api/v2/pokemon';
   const dispatch = useDispatch();
   const allPokemon = useSelector(selectors.getAllPokemons);
-  // const favoritePokemon = useSelector(selectors.getFavoritePokemon);
+
   useEffect(() => {
     async function addFavoritPokemon() {
       const parseFavoritePokemon = JSON.parse(
@@ -31,6 +35,9 @@ function GalleryPage() {
 
     async function fetchData() {
       let response = await getAllPokemon(initialURL);
+
+      setTotal(response.count);
+
       setNextUrl(response.next);
       setPrevUrl(response.previous);
       await loadPokemon(response.results);
@@ -77,6 +84,14 @@ function GalleryPage() {
       setIsOpen(true);
     }
   };
+  const onChange = currentPage => {
+    if (currentPage > page) {
+      next();
+    } else {
+      prev();
+    }
+    setPage(currentPage);
+  };
 
   return (
     <div>
@@ -91,15 +106,17 @@ function GalleryPage() {
             <button onClick={prev}>Prev</button>
             <button onClick={next}>Next</button>
           </div>
-          <div className={`${style.pokemonContainer} `}>
+          <Row className={style.pokemonContainer}>
             {allPokemon.map(pokemon => (
-              <Card
-                updatePokemon={updatePokemon}
-                key={pokemon.id}
-                pokemon={pokemon}
-              />
+              <Col key={pokemon.name} className={style.card}>
+                <Card
+                  updatePokemon={updatePokemon}
+                  key={pokemon.id}
+                  pokemon={pokemon}
+                />
+              </Col>
             ))}
-          </div>
+          </Row>
           <div className="btn">
             <button onClick={prev}>Prev</button>
             <button onClick={next}>Next</button>
@@ -108,6 +125,13 @@ function GalleryPage() {
             pokemon={pokemonModal}
             open={isOpen}
             onClose={() => setIsOpen(false)}
+          />
+          <Pagination
+            className={style.pagination}
+            defaultCurrent={page}
+            total={total}
+            showSizeChanger={false}
+            onChange={onChange}
           />
         </>
       )}
