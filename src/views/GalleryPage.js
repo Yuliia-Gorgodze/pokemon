@@ -7,11 +7,12 @@ import Modal from '../components/ModalPokemonInfo';
 import selectors from '../redux/pokemon/pokemon-selectors';
 import operations from '../redux/pokemon/pokemon-operations';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Pagination } from 'antd';
+import { Pagination, Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 
 function GalleryPage() {
   const [pokemonModal, setPokemonModal] = useState({});
+  const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
@@ -21,9 +22,18 @@ function GalleryPage() {
   const allPokemon = useSelector(selectors.getAllPokemons);
 
   useEffect(() => {
+    async function addFavoritPokemon() {
+      const parseFavoritePokemon = JSON.parse(
+        await localStorage.getItem('favoritePokemon'),
+      );
+      if (parseFavoritePokemon) {
+        dispatch(operations.addFavoritePokemon(...parseFavoritePokemon));
+      }
+    }
+    addFavoritPokemon();
+
     async function fetchData() {
       let response = await getAllPokemon(initialURL);
-
       setNextUrl(response.next);
       setPrevUrl(response.previous);
       await loadPokemon(response.results);
@@ -70,6 +80,14 @@ function GalleryPage() {
       setIsOpen(true);
     }
   };
+  const onChange = currentPage => {
+    if (currentPage > page) {
+      next();
+    } else {
+      prev();
+    }
+    setPage(currentPage);
+  };
 
   return (
     <div>
@@ -84,13 +102,26 @@ function GalleryPage() {
             <button onClick={prev}>Prev</button>
             <button onClick={next}>Next</button>
           </div>
-          <div className={`${style.pokemonContainer} `}>
-            {allPokemon.map((pokemon, i) => {
-              return (
-                <Card updatePokemon={updatePokemon} key={i} pokemon={pokemon} />
-              );
-            })}
-          </div>
+          <Row className={style.pokemonContainer}>
+            {allPokemon.map(pokemon => (
+              <Col className={style.card}>
+                <Card
+                  updatePokemon={updatePokemon}
+                  key={pokemon.id}
+                  pokemon={pokemon}
+                />
+              </Col>
+            ))}
+          </Row>
+          {/* <div className={`${style.pokemonContainer} `}>
+            {allPokemon.map(pokemon => (
+              <Card
+                updatePokemon={updatePokemon}
+                key={pokemon.id}
+                pokemon={pokemon}
+              />
+            ))}
+          </div> */}
           <div className="btn">
             <button onClick={prev}>Prev</button>
             <button onClick={next}>Next</button>
@@ -100,9 +131,13 @@ function GalleryPage() {
             open={isOpen}
             onClose={() => setIsOpen(false)}
           />
-          <div>
-            <Pagination defaultCurrent={1} total={50} />
-          </div>
+          <Pagination
+            className={style.pagination}
+            defaultCurrent={page}
+            total={1118}
+            showSizeChanger={false}
+            onChange={onChange}
+          />
         </>
       )}
     </div>
