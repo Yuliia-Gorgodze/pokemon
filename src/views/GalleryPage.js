@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Card from '../components/PokemonCard';
-import { getPokemon, getAllPokemon, getPokemonUrl } from '../services/pokemon';
+import { getPokemon, getAllPokemon } from '../services/pokemon';
 import style from './styles/galleryPage.module.css';
-import Modal from '../components/ModalPokemonInfo';
+import ModalPokemonInfo from '../components/ModalPokemonInfo';
 import selectors from '../redux/pokemon/pokemon-selectors';
 import operations from '../redux/pokemon/pokemon-operations';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Pagination, Row, Col } from 'antd';
 import 'antd/dist/antd.css';
 
+import 'antd/dist/antd.css';
+
 function GalleryPage() {
-  const [pokemonModal, setPokemonModal] = useState({});
+  const [pokemonModal, setPokemonModal] = useState();
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+
   const [isOpen, setIsOpen] = useState(false);
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
@@ -76,14 +79,16 @@ function GalleryPage() {
   };
 
   const updatePokemon = async (pokemon, modalOpen) => {
-    const url = `${initialURL}/${pokemon.id}/`;
-
-    let pokemonUrl = await getPokemonUrl(url);
-    await setPokemonModal({ pokemonUrl });
+    await setPokemonModal(pokemon.id);
     if (modalOpen) {
       setIsOpen(true);
     }
   };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   const onChange = currentPage => {
     if (currentPage > page) {
       next();
@@ -121,10 +126,11 @@ function GalleryPage() {
             <button onClick={prev}>Prev</button>
             <button onClick={next}>Next</button>
           </div>
-          <Modal
-            pokemon={pokemonModal}
+
+          <ModalPokemonInfo
+            pokemonid={pokemonModal}
             open={isOpen}
-            onClose={() => setIsOpen(false)}
+            onClose={closeModal}
           />
           <Pagination
             className={style.pagination}
