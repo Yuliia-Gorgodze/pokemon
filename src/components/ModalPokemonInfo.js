@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import ReactDom from 'react-dom';
 import style from './styles/modal.module.css';
 import typeColors from '../helpers/color';
@@ -19,6 +20,7 @@ function ModalPokemonInfo({ open, onClose, pokemonid }) {
     getPokemon();
   }, []);
   const [pokemon, setpokemon] = useState({});
+
   if (!open) return null;
 
   return ReactDom.createPortal(

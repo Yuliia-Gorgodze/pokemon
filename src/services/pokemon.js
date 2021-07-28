@@ -7,6 +7,7 @@ export function getPokemon({ url }) {
       });
   });
 }
+
 export function getPokemonUrl(url) {
   return new Promise((resolve, reject) => {
     fetch(url)
