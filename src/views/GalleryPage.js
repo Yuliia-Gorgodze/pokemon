@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Card from '../components/PokemonCard';
-import { getPokemon, getAllPokemon, getPokemonUrl } from '../services/pokemon';
+import { getPokemon, getAllPokemon } from '../services/pokemon';
 import style from './styles/galleryPage.module.css';
 import ModalPokemonInfo from '../components/ModalPokemonInfo';
 import selectors from '../redux/pokemon/pokemon-selectors';
@@ -11,7 +11,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 
 function GalleryPage() {
-  const [pokemonModal, setPokemonModal] = useState({});
+  const [pokemonModal, setPokemonModal] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
@@ -71,10 +71,7 @@ function GalleryPage() {
   };
 
   const updatePokemon = async (pokemon, modalOpen) => {
-    const url = `${initialURL}/${pokemon.id}/`;
-
-    let pokemonUrl = await getPokemonUrl(url);
-    await setPokemonModal({ pokemonUrl });
+    await setPokemonModal(pokemon.id);
     if (modalOpen) {
       setIsOpen(true);
     }
@@ -110,7 +107,7 @@ function GalleryPage() {
           </div>
 
           <ModalPokemonInfo
-            pokemon={pokemonModal}
+            pokemonid={pokemonModal}
             open={isOpen}
             onClose={closeModal}
           />
