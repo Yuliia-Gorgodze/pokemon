@@ -43,7 +43,6 @@ export async function getPokemonName(name) {
   return new Promise((resolve, reject) => {
     fetch(url)
       .then(res => {
-        console.log(res);
         if (res.status === 404) {
           resolve(res.status);
         }

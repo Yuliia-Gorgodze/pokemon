@@ -88,8 +88,8 @@ function GalleryPage() {
   };
 
   const updatePokemon = async (pokemon, modalOpen) => {
-    await setPokemonModal(pokemon.id);
     if (modalOpen) {
+      await setPokemonModal(pokemon.id);
       setIsOpen(true);
     }
   };
@@ -162,7 +162,7 @@ function GalleryPage() {
             </Select>
           </div>
 
-          {!notFoundPokemon ? (
+          {!notFoundPokemon && (
             <Row className={style.pokemonContainer}>
               {allPokemon.length <= 20
                 ? allPokemon.map(pokemon => (
@@ -174,27 +174,26 @@ function GalleryPage() {
                       />
                     </Col>
                   ))
-                : allPokemon
-                    .slice(page >= 2 ? page * 20 - 20 : 0, page * 20)
-                    .map(pokemon => (
-                      <Col key={pokemon.name} className={style.card}>
-                        <Card
-                          updatePokemon={updatePokemon}
-                          key={pokemon.id}
-                          pokemon={pokemon}
-                        />
-                      </Col>
-                    ))}
+                : allPokemon.slice(0, total).map(pokemon => (
+                    <Col key={pokemon.name} className={style.card}>
+                      <Card
+                        updatePokemon={updatePokemon}
+                        key={pokemon.id}
+                        pokemon={pokemon}
+                      />
+                    </Col>
+                  ))}
             </Row>
-          ) : (
-            <h1>Нет такого покемона !!! </h1>
           )}
+
+          {notFoundPokemon && <h1>Нет такого покемона !!! </h1>}
 
           <ModalPokemonInfo
             pokemonid={pokemonModal}
             open={isOpen}
             onClose={closeModal}
           />
+
           {total >= 20 && (
             <Pagination
               className={style.pagination}
