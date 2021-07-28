@@ -44,7 +44,7 @@ function ModalPokemonInfo({ open, onClose, pokemonid }) {
             {pokemon.pokemon.types.map(type => {
               return (
                 <div
-                  key={nanoid()}
+                  key={type.type.name}
                   className={style.cardType}
                   style={{ backgroundColor: typeColors[type.type.name] }}
                 >
