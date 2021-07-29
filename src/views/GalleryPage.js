@@ -35,18 +35,20 @@ function GalleryPage() {
   const allPokemon = useSelector(selectors.getAllPokemons);
 
   const typeArray = Object.keys(typePokemon);
-
+  const favoritePokemon = useSelector(selectors.getFavoritePokemon);
   useEffect(() => {
     async function addFavoritPokemon() {
       const parseFavoritePokemon = JSON.parse(
         await localStorage.getItem('favoritePokemon'),
       );
-      if (parseFavoritePokemon) {
+      if (parseFavoritePokemon.length === 0) {
+        return;
+      }
+      if (parseFavoritePokemon && parseFavoritePokemon.length !== 0) {
         dispatch(operations.addFavoritePokemon(...parseFavoritePokemon));
       }
     }
     addFavoritPokemon();
-
     async function fetchData() {
       let response = await getAllPokemon(initialURL);
       setTotal(response.count);
@@ -174,15 +176,20 @@ function GalleryPage() {
                       />
                     </Col>
                   ))
-                : allPokemon.slice(0, total).map(pokemon => (
-                    <Col key={pokemon.name} className={style.card}>
-                      <Card
-                        updatePokemon={updatePokemon}
-                        key={pokemon.id}
-                        pokemon={pokemon}
-                      />
-                    </Col>
-                  ))}
+                : allPokemon
+                    .slice(
+                      page * 20 - 20,
+                      Math.ceil(total / 20) !== page ? page * 20 : total,
+                    )
+                    .map(pokemon => (
+                      <Col key={pokemon.name} className={style.card}>
+                        <Card
+                          updatePokemon={updatePokemon}
+                          key={pokemon.id}
+                          pokemon={pokemon}
+                        />
+                      </Col>
+                    ))}
             </Row>
           )}
 
@@ -197,6 +204,7 @@ function GalleryPage() {
           {total >= 20 && (
             <Pagination
               className={style.pagination}
+              pageSize={20}
               defaultCurrent={page}
               total={total}
               showSizeChanger={false}

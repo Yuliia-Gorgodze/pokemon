@@ -12,7 +12,7 @@ function Card({ pokemon, updatePokemon }) {
   const dispatch = useDispatch();
   const page = useSelector(selectorsPage.getPage);
   const favoritePokemon = useSelector(selectors.getFavoritePokemon);
-  const favoritPokemonId = favoritePokemon.map(el => el.id);
+  // const favoritPokemonId = favoritePokemon.map(el => el.id);
   const handleChange = e => {
     if (page === 'gallery' && e.target.nodeName === 'BUTTON') {
       e.target.classList.toggle('buttonAddFavorite');
@@ -49,14 +49,14 @@ function Card({ pokemon, updatePokemon }) {
     }
   };
   const addFavorite = async () => {
-    if (favoritPokemonId.includes(pokemon.id)) {
+    if (favoritePokemon.find(el => el.id === pokemon.id)) {
       await dispatch(operations.deleteFavoritePokemon(pokemon.id));
       return;
     } else {
       await dispatch(operations.addFavoritePokemon(pokemon));
     }
   };
-
+ 
   return (
     <div className={`${style.baseContainer} ${style.Card}`}>
       <div className={style.Card__name}>{pokemon.name}</div>
@@ -68,7 +68,7 @@ function Card({ pokemon, updatePokemon }) {
       />
       <button
         className={`${style.button} ${
-          favoritPokemonId.find(el => el === pokemon.id) === undefined
+          favoritePokemon.find(el => el.id === pokemon.id) === undefined
             ? ''
             : 'buttonAddFavorite'
         }`}
