@@ -41,11 +41,12 @@ function GalleryPage() {
       const parseFavoritePokemon = JSON.parse(
         await localStorage.getItem('favoritePokemon'),
       );
-      if (parseFavoritePokemon.length === 0) {
-        return;
-      }
-      if (parseFavoritePokemon && parseFavoritePokemon.length !== 0) {
-        dispatch(operations.addFavoritePokemon(...parseFavoritePokemon));
+      console.log(parseFavoritePokemon);
+      // if (parseFavoritePokemon.length === 0) {
+      //   return;
+      // }
+      if (parseFavoritePokemon) {
+        await dispatch(operations.addFavoritePokemon(parseFavoritePokemon));
       }
     }
     addFavoritPokemon();
