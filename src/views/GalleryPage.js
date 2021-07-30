@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Card from '../components/PokemonCard';
 import {
-  getPokemon,
   getAllPokemon,
   getPokemonType,
-  getPokemonUrl,
   getPokemonName,
 } from '../services/pokemon';
 import typePokemon from '../helpers/color';
@@ -30,32 +28,26 @@ function GalleryPage() {
   const [loading, setLoading] = useState(true);
   const [notFoundPokemon, setNotFoundPokemon] = useState(false);
 
-  const initialURL = 'https://pokeapi.co/api/v2/pokemon';
   const dispatch = useDispatch();
   const allPokemon = useSelector(selectors.getAllPokemons);
-
   const typeArray = Object.keys(typePokemon);
-  const favoritePokemon = useSelector(selectors.getFavoritePokemon);
+
   useEffect(() => {
     async function addFavoritPokemon() {
       const parseFavoritePokemon = JSON.parse(
         await localStorage.getItem('favoritePokemon'),
       );
-      console.log(parseFavoritePokemon);
-      // if (parseFavoritePokemon.length === 0) {
-      //   return;
-      // }
       if (parseFavoritePokemon) {
         await dispatch(operations.addFavoritePokemon(parseFavoritePokemon));
       }
     }
     addFavoritPokemon();
     async function fetchData() {
-      let response = await getAllPokemon(initialURL);
+      let response = await getAllPokemon();
       setTotal(response.count);
       setNextUrl(response.next);
       setPrevUrl(response.previous);
-      await loadPokemon(response.results);
+      dispatch(operations.addAllPokemon(response.results));
       setLoading(false);
     }
     fetchData();
@@ -64,35 +56,25 @@ function GalleryPage() {
   const next = async () => {
     setLoading(true);
     let data = await getAllPokemon(nextUrl);
-    await loadPokemon(data.results);
+    dispatch(operations.addAllPokemon(data.results));
     setNextUrl(data.next);
     setPrevUrl(data.previous);
     setLoading(false);
   };
-
   const prev = async () => {
     if (!prevUrl) return;
     setLoading(true);
     let data = await getAllPokemon(prevUrl);
-    await loadPokemon(data.results);
+    dispatch(operations.addAllPokemon(data.results));
     setNextUrl(data.next);
     setPrevUrl(data.previous);
     setLoading(false);
   };
-
-  const loadPokemon = async data => {
-    let _pokemonData = await Promise.all(
-      data.map(async pokemon => {
-        let pokemonRecord = await getPokemon(pokemon);
-        return pokemonRecord;
-      }),
-    );
-    dispatch(operations.addAllPokemon(_pokemonData));
-  };
-
   const updatePokemon = async (pokemon, modalOpen) => {
     if (modalOpen) {
-      await setPokemonModal(pokemon.id);
+      const pokemonUrl = pokemon.url.split('');
+      const pokemonId = pokemonUrl.slice(34, pokemonUrl.length - 1).join('');
+      await setPokemonModal(pokemonId);
       setIsOpen(true);
     }
   };
@@ -107,7 +89,6 @@ function GalleryPage() {
     } else {
       prev();
     }
-
     setPage(currentPage);
   };
 
@@ -115,24 +96,17 @@ function GalleryPage() {
     setLoading(true);
     const typeIndex = typeArray.indexOf(value) + 1;
     let data = await getPokemonType(typeIndex);
-    let _pokemonData = await Promise.all(
-      data.map(async pokemon => {
-        let pokemonRecord = await getPokemonUrl(pokemon.pokemon.url);
-        return pokemonRecord;
-      }),
-    );
-    dispatch(operations.addAllPokemon(_pokemonData));
+    dispatch(operations.addAllPokemon(data));
     setLoading(false);
-    setTotal(_pokemonData.length);
+    setTotal(data.length);
   };
   const onSearch = async name => {
     setLoading(true);
-
     let data = await getPokemonName(name);
     if (data === 404) {
       setNotFoundPokemon(true);
     } else {
-      dispatch(operations.addAllPokemon([data]));
+      dispatch(operations.addAllPokemon([data[0]]));
       setNotFoundPokemon(false);
     }
     setLoading(false);
@@ -172,7 +146,7 @@ function GalleryPage() {
                     <Col key={pokemon.name} className={style.card}>
                       <Card
                         updatePokemon={updatePokemon}
-                        key={pokemon.id}
+                        key={pokemon.name}
                         pokemon={pokemon}
                       />
                     </Col>

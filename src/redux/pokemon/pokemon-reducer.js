@@ -11,14 +11,14 @@ const allPokemon = createReducer([], {
 const favoritePokemon = createReducer([], {
   [addFavoritePokemonSuccess]: (state, { payload }) => {
     if (payload.length > 0) {
-      const stateId = state.length !== 0 ? state.map(el => el.id) : [];
-      const pokemon = payload.filter(el => !stateId.includes(el.id));
+      const stateId = state.length !== 0 ? state.map(el => el.name) : [];
+      const pokemon = payload.filter(el => !stateId.includes(el.name));
       return [...state, ...pokemon];
     }
     return state;
   },
   [deleteFavoritePokemonSuccess]: (state, { payload }) => {
-    let deleteFavorite = state.map(el => el.id);
+    let deleteFavorite = state.map(el => el.name);
     if (deleteFavorite.indexOf(payload) === -1) {
       return state;
     } else {

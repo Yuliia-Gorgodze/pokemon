@@ -12,7 +12,10 @@ function Card({ pokemon, updatePokemon }) {
   const dispatch = useDispatch();
   const page = useSelector(selectorsPage.getPage);
   const favoritePokemon = useSelector(selectors.getFavoritePokemon);
-  // const favoritPokemonId = favoritePokemon.map(el => el.id);
+
+  const pokemonUrl = pokemon.url.split('');
+  const pokemonId = pokemonUrl.slice(34, pokemonUrl.length - 1).join('');
+
   const handleChange = e => {
     if (page === 'gallery' && e.target.nodeName === 'BUTTON') {
       e.target.classList.toggle('buttonAddFavorite');
@@ -32,7 +35,7 @@ function Card({ pokemon, updatePokemon }) {
       const addNewPokemonInLS = JSON.parse(
         localStorage.getItem('favoritePokemon'),
       );
-      const a = addNewPokemonInLS.findIndex(el => el.id === pokemon.id);
+      const a = addNewPokemonInLS.findIndex(el => el.name === pokemon.name);
       if (a !== -1) {
         addNewPokemonInLS.splice(a, 1);
       } else {
@@ -49,8 +52,8 @@ function Card({ pokemon, updatePokemon }) {
     }
   };
   const addFavorite = async () => {
-    if (favoritePokemon.find(el => el.id === pokemon.id)) {
-      await dispatch(operations.deleteFavoritePokemon(pokemon.id));
+    if (favoritePokemon.find(el => el.name === pokemon.name)) {
+      await dispatch(operations.deleteFavoritePokemon(pokemon.name));
       return;
     } else {
       await dispatch(operations.addFavoritePokemon(pokemon));
@@ -63,12 +66,12 @@ function Card({ pokemon, updatePokemon }) {
       <img
         onClick={handleChange}
         className={style.Card__img}
-        src={pokemon.sprites.front_default}
+        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`}
         alt="pokemon"
       />
       <button
         className={`${style.button} ${
-          favoritePokemon.map(el => el.id).find(el => el === pokemon.id) ===
+          favoritePokemon.map(el => el.name).find(el => el === pokemon.name) ===
           undefined
             ? ''
             : 'buttonAddFavorite'
@@ -77,8 +80,9 @@ function Card({ pokemon, updatePokemon }) {
         type="button"
       >
         {page === 'gallery' &&
-        favoritePokemon.map(el => el.id).find(el => el.id === pokemon.id) ===
-          undefined ? (
+        favoritePokemon
+          .map(el => el.name)
+          .find(el => el.name === pokemon.name) === undefined ? (
           <HeartTwoTone className={style.favorite} />
         ) : (
           <DeleteTwoTone className={style.delete} />
