@@ -12,7 +12,7 @@ function Card({ pokemon, updatePokemon }) {
   const dispatch = useDispatch();
   const page = useSelector(selectorsPage.getPage);
   const favoritePokemon = useSelector(selectors.getFavoritePokemon);
-  const favoritPokemonId = favoritePokemon.map(el => el.id);
+  // const favoritPokemonId = favoritePokemon.map(el => el.id);
   const handleChange = e => {
     if (page === 'gallery' && e.target.nodeName === 'BUTTON') {
       e.target.classList.toggle('buttonAddFavorite');
@@ -49,7 +49,7 @@ function Card({ pokemon, updatePokemon }) {
     }
   };
   const addFavorite = async () => {
-    if (favoritPokemonId.includes(pokemon.id)) {
+    if (favoritePokemon.find(el => el.id === pokemon.id)) {
       await dispatch(operations.deleteFavoritePokemon(pokemon.id));
       return;
     } else {
@@ -68,7 +68,8 @@ function Card({ pokemon, updatePokemon }) {
       />
       <button
         className={`${style.button} ${
-          favoritPokemonId.find(el => el === pokemon.id) === undefined
+          favoritePokemon.map(el => el.id).find(el => el === pokemon.id) ===
+          undefined
             ? ''
             : 'buttonAddFavorite'
         }`}
@@ -76,7 +77,8 @@ function Card({ pokemon, updatePokemon }) {
         type="button"
       >
         {page === 'gallery' &&
-        favoritePokemon.find(el => el.id === pokemon.id) === undefined ? (
+        favoritePokemon.map(el => el.id).find(el => el.id === pokemon.id) ===
+          undefined ? (
           <HeartTwoTone className={style.favorite} />
         ) : (
           <DeleteTwoTone className={style.delete} />

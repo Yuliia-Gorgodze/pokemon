@@ -12,10 +12,8 @@ function FavoritePage() {
       const parseFavoritePokemon = JSON.parse(
         await localStorage.getItem('favoritePokemon'),
       );
-      if (parseFavoritePokemon) {
-        parseFavoritePokemon.forEach(el =>
-          dispatch(operations.addFavoritePokemon(el)),
-        );
+      if (parseFavoritePokemon !== 0) {
+        dispatch(operations.addFavoritePokemon(parseFavoritePokemon));
       }
     }
     addFavoritPokemon();
