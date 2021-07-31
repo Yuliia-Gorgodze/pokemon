@@ -4,6 +4,7 @@ import selectors from '../redux/pokemon/pokemon-selectors';
 import operations from '../redux/pokemon/pokemon-operations';
 import { useSelector, useDispatch } from 'react-redux';
 import style from './styles/galleryPage.module.css';
+import { Row, Col } from 'antd';
 
 function FavoritePage() {
   const dispatch = useDispatch();
@@ -29,11 +30,13 @@ function FavoritePage() {
           <span className={style.textTwo}>Полюби!!!</span>
         </div>
       )}
-      <div className={`${style.pokemonContainer} `}>
+      <Row className={`${style.pokemonContainer}`}>
         {favoritePokemon.map(pokemon => (
-          <Card key={pokemon.id} pokemon={pokemon} />
+          <Col key={pokemon.name} className={style.card}>
+            <Card key={pokemon.name} pokemon={pokemon} />
+          </Col>
         ))}
-      </div>
+      </Row>
     </>
   );
 }
