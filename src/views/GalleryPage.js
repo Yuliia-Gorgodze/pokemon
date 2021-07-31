@@ -72,8 +72,7 @@ function GalleryPage() {
   };
   const updatePokemon = async (pokemon, modalOpen) => {
     if (modalOpen) {
-      const pokemonUrl = pokemon.url.split('');
-      const pokemonId = pokemonUrl.slice(34, pokemonUrl.length - 1).join('');
+      const pokemonId = pokemon.url.split('/').filter(Boolean).pop();
       await setPokemonModal(pokemonId);
       setIsOpen(true);
     }

@@ -13,8 +13,7 @@ function Card({ pokemon, updatePokemon }) {
   const page = useSelector(selectorsPage.getPage);
   const favoritePokemon = useSelector(selectors.getFavoritePokemon);
 
-  const pokemonUrl = pokemon.url.split('');
-  const pokemonId = pokemonUrl.slice(34, pokemonUrl.length - 1).join('');
+  const pokemonId = pokemon.url.split('/').filter(Boolean).pop();
 
   const handleChange = e => {
     if (page === 'gallery' && e.target.nodeName === 'BUTTON') {

@@ -11,8 +11,8 @@ const allPokemon = createReducer([], {
 const favoritePokemon = createReducer([], {
   [addFavoritePokemonSuccess]: (state, { payload }) => {
     if (payload.length > 0) {
-      const stateId = state.length !== 0 ? state.map(el => el.name) : [];
-      const pokemon = payload.filter(el => !stateId.includes(el.name));
+      const stateName = state.length !== 0 ? state.map(el => el.name) : [];
+      const pokemon = payload.filter(el => !stateName.includes(el.name));
       return [...state, ...pokemon];
     }
     return state;
