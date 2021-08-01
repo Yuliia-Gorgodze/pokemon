@@ -22,20 +22,21 @@ const addAllPokemon = pokemons => async dispatch => {
 
 const addFavoritePokemon = (pokemon, favoritePokemon) => async dispatch => {
   dispatch(addFavoritePokemonRequest());
+
   try {
-    dispatch(addFavoritePokemonSuccess(pokemon));
+    if (pokemon.length > 1) {
+      dispatch(addPokemoninlocalStorage(pokemon, favoritePokemon));
+      return;
+    }
+    if (favoritePokemon.length === 0) {
+      dispatch(addPokemoninlocalStorage(pokemon, favoritePokemon));
+    } else {
+      dispatch(addFavoritePokemonSuccess(pokemon));
+    }
   } catch (error) {
     dispatch(addFavoritePokemonError(error));
   }
 };
-const addPokemonInLocaStorage =
-  (pokemon, favoritePokemon) => async dispatch => {
-    try {
-      dispatch(addPokemoninlocalStorage(pokemon, favoritePokemon));
-    } catch (error) {
-      console.log(error);
-    }
-  };
 const deleteFavoritePokemon = (name, favoritePokemons) => async dispatch => {
   dispatch(deleteFavoritePokemonRequest());
   try {
@@ -45,10 +46,5 @@ const deleteFavoritePokemon = (name, favoritePokemons) => async dispatch => {
   }
 };
 
-const operations = {
-  addFavoritePokemon,
-  deleteFavoritePokemon,
-  addAllPokemon,
-  addPokemonInLocaStorage,
-};
+const operations = { addFavoritePokemon, deleteFavoritePokemon, addAllPokemon };
 export default operations;

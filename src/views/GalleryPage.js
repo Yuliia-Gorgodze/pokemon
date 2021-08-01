@@ -22,7 +22,6 @@ function GalleryPage() {
   const [pokemonModal, setPokemonModal] = useState();
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [type, setType] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
@@ -33,7 +32,7 @@ function GalleryPage() {
   const favoritePokemon = useSelector(selectors.getFavoritePokemon);
   const allPokemon = useSelector(selectors.getAllPokemons);
   const typeArray = Object.keys(typePokemon);
-  const initialURL = 'https://pokeapi.co/api/v2/pokemon';
+
   useEffect(() => {
     async function addFavoritPokemon() {
       const parseFavoritePokemon = JSON.parse(
@@ -41,21 +40,17 @@ function GalleryPage() {
       );
       if (parseFavoritePokemon) {
         await dispatch(
-          operations.addPokemonInLocaStorage(
-            parseFavoritePokemon,
-            favoritePokemon,
-          ),
+          operations.addFavoritePokemon(parseFavoritePokemon, favoritePokemon),
         );
       }
     }
     addFavoritPokemon();
     async function fetchData() {
-      let response = await getAllPokemon(initialURL);
+      let response = await getAllPokemon();
       setTotal(response.count);
       setNextUrl(response.next);
       setPrevUrl(response.previous);
       dispatch(operations.addAllPokemon(response.results));
-
       setLoading(false);
     }
     fetchData();
@@ -91,10 +86,6 @@ function GalleryPage() {
   };
 
   const onChange = currentPage => {
-    if (type !== '') {
-      setPage(currentPage);
-      return;
-    }
     if (currentPage > page) {
       next();
     } else {
@@ -105,7 +96,6 @@ function GalleryPage() {
 
   const onChangeType = async value => {
     setLoading(true);
-    setType(value);
     const typeIndex = typeArray.indexOf(value) + 1;
     let data = await getPokemonType(typeIndex);
     dispatch(operations.addAllPokemon(data));
