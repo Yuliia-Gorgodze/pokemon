@@ -8,6 +8,7 @@ import {
   getPokemonRequest,
   getPokemonSuccess,
   getPokemonError,
+  addPokemoninlocalStorage,
 } from './pokemon-actions';
 
 const addAllPokemon = pokemons => async dispatch => {
@@ -19,18 +20,27 @@ const addAllPokemon = pokemons => async dispatch => {
   }
 };
 
-const addFavoritePokemon = pokemon => async dispatch => {
+const addFavoritePokemon = (pokemon, favoritePokemon) => async dispatch => {
   dispatch(addFavoritePokemonRequest());
+
   try {
-    dispatch(addFavoritePokemonSuccess(pokemon));
+    if (pokemon.length > 1) {
+      dispatch(addPokemoninlocalStorage(pokemon, favoritePokemon));
+      return;
+    }
+    if (favoritePokemon.length === 0) {
+      dispatch(addPokemoninlocalStorage(pokemon, favoritePokemon));
+    } else {
+      dispatch(addFavoritePokemonSuccess(pokemon));
+    }
   } catch (error) {
     dispatch(addFavoritePokemonError(error));
   }
 };
-const deleteFavoritePokemon = id => async dispatch => {
+const deleteFavoritePokemon = (name, favoritePokemons) => async dispatch => {
   dispatch(deleteFavoritePokemonRequest());
   try {
-    dispatch(deleteFavoritePokemonSuccess(id));
+    dispatch(deleteFavoritePokemonSuccess(name, favoritePokemons));
   } catch (error) {
     dispatch(deleteFavoritePokemonError(error));
   }
