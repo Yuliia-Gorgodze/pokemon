@@ -29,6 +29,7 @@ function GalleryPage() {
   const [notFoundPokemon, setNotFoundPokemon] = useState(false);
 
   const dispatch = useDispatch();
+  const favoritePokemon = useSelector(selectors.getFavoritePokemon);
   const allPokemon = useSelector(selectors.getAllPokemons);
   const typeArray = Object.keys(typePokemon);
 
@@ -38,7 +39,9 @@ function GalleryPage() {
         await localStorage.getItem('favoritePokemon'),
       );
       if (parseFavoritePokemon) {
-        await dispatch(operations.addFavoritePokemon(parseFavoritePokemon));
+        await dispatch(
+          operations.addFavoritePokemon(parseFavoritePokemon, favoritePokemon),
+        );
       }
     }
     addFavoritPokemon();

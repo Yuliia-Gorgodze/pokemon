@@ -4,28 +4,15 @@ import {
   addFavoritePokemonSuccess,
   deleteFavoritePokemonSuccess,
   getPokemonSuccess,
+  addPokemoninlocalStorage,
 } from './pokemon-actions';
 const allPokemon = createReducer([], {
   [getPokemonSuccess]: (_, { payload }) => payload,
 });
 const favoritePokemon = createReducer([], {
-  [addFavoritePokemonSuccess]: (state, { payload }) => {
-    if (payload.length > 0) {
-      const stateName = state.length !== 0 ? state.map(el => el.name) : [];
-      const pokemon = payload.filter(el => !stateName.includes(el.name));
-      return [...state, ...pokemon];
-    }
-    return state;
-  },
-  [deleteFavoritePokemonSuccess]: (state, { payload }) => {
-    let deleteFavorite = state.map(el => el.name);
-    if (deleteFavorite.indexOf(payload) === -1) {
-      return state;
-    } else {
-      state.splice(deleteFavorite.indexOf(payload), 1);
-      return state;
-    }
-  },
+  [addFavoritePokemonSuccess]: (state, { payload }) => [...state, payload],
+  [addPokemoninlocalStorage]: (_, { payload }) => payload,
+  [deleteFavoritePokemonSuccess]: (_, { payload }) => payload,
 });
 
 export default combineReducers({

@@ -16,9 +16,6 @@ function Card({ pokemon, updatePokemon }) {
   const pokemonId = pokemon.url.split('/').filter(Boolean).pop();
 
   const handleChange = e => {
-    if (page === 'gallery' && e.target.nodeName === 'BUTTON') {
-      e.target.classList.toggle('buttonAddFavorite');
-    }
     if (e.target.nodeName === 'BUTTON') {
       addFavorite();
       addLocalStorage();
@@ -52,10 +49,12 @@ function Card({ pokemon, updatePokemon }) {
   };
   const addFavorite = async () => {
     if (favoritePokemon.find(el => el.name === pokemon.name)) {
-      await dispatch(operations.deleteFavoritePokemon(pokemon.name));
+      await dispatch(
+        operations.deleteFavoritePokemon(pokemon.name, favoritePokemon),
+      );
       return;
     } else {
-      await dispatch(operations.addFavoritePokemon(pokemon));
+      await dispatch(operations.addFavoritePokemon(pokemon, favoritePokemon));
     }
   };
 
@@ -70,8 +69,7 @@ function Card({ pokemon, updatePokemon }) {
       />
       <button
         className={`${style.button} ${
-          favoritePokemon.map(el => el.name).find(el => el === pokemon.name) ===
-          undefined
+          favoritePokemon.some(el => el.name === pokemon.name)
             ? ''
             : 'buttonAddFavorite'
         }`}
@@ -79,9 +77,7 @@ function Card({ pokemon, updatePokemon }) {
         type="button"
       >
         {page === 'gallery' &&
-        favoritePokemon
-          .map(el => el.name)
-          .find(el => el.name === pokemon.name) === undefined ? (
+        favoritePokemon.some(el => el.name === pokemon.name) ? (
           <HeartTwoTone className={style.favorite} />
         ) : (
           <DeleteTwoTone className={style.delete} />
