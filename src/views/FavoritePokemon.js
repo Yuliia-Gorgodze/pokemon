@@ -19,7 +19,10 @@ function FavoritePage() {
       dispatch(page(parsePage));
       if (parseFavoritePokemon !== 0) {
         dispatch(
-          operations.addFavoritePokemon(parseFavoritePokemon, favoritePokemon),
+          operations.addPokemonInLocaStorage(
+            parseFavoritePokemon,
+            favoritePokemon,
+          ),
         );
       }
     }
