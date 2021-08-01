@@ -57,7 +57,6 @@ function Card({ pokemon, updatePokemon }) {
       await dispatch(operations.addFavoritePokemon(pokemon, favoritePokemon));
     }
   };
-
   return (
     <div className={`${style.baseContainer} ${style.Card}`}>
       <div className={style.Card__name}>{pokemon.name}</div>
@@ -69,7 +68,7 @@ function Card({ pokemon, updatePokemon }) {
       />
       <button
         className={`${style.button} ${
-          favoritePokemon.some(el => el.name === pokemon.name)
+          favoritePokemon.find(el => el.name === pokemon.name) === undefined
             ? ''
             : 'buttonAddFavorite'
         }`}
@@ -77,7 +76,7 @@ function Card({ pokemon, updatePokemon }) {
         type="button"
       >
         {page === 'gallery' &&
-        favoritePokemon.some(el => el.name === pokemon.name) ? (
+        favoritePokemon.find(el => el.name === pokemon.name) === undefined ? (
           <HeartTwoTone className={style.favorite} />
         ) : (
           <DeleteTwoTone className={style.delete} />

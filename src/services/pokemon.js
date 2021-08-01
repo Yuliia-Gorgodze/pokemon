@@ -1,5 +1,3 @@
-const initialURL = 'https://pokeapi.co/api/v2/pokemon';
-
 export function getPokemonUrl(url) {
   return new Promise((resolve, reject) => {
     fetch(url)
@@ -10,9 +8,9 @@ export function getPokemonUrl(url) {
   });
 }
 
-export async function getAllPokemon() {
+export async function getAllPokemon(url) {
   return new Promise((resolve, reject) => {
-    fetch(initialURL)
+    fetch(url)
       .then(res => res.json())
       .then(data => {
         resolve(data);
