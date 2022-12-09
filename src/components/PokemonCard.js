@@ -77,7 +77,7 @@ function Card({ pokemon, updatePokemon }) {
         type="button"
       >
         {page === 'gallery' &&
-        favoritePokemon.some(el => el.name === pokemon.name) ? (
+        favoritePokemon.some(el => el.name !== pokemon.name) ? (
           <HeartTwoTone className={style.favorite} />
         ) : (
           <DeleteTwoTone className={style.delete} />
